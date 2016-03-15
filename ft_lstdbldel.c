@@ -16,14 +16,13 @@ void	ft_lstdbldel(t_dbllist **list)
 {
 	t_elem	*tmp;
 
-	tmp = NULL;
-	while ((*list)->head != NULL)
+	tmp = (*list)->head;
+	while (tmp != NULL)
 	{
-		tmp = (*list)->head->next;
-		free((*list)->head->content);
-		(*list)->head->content = NULL;
-		free((*list)->head);
-		(*list)->head = tmp;
+		free(tmp->content);
+		tmp->content = NULL;
+		free(tmp);
+		tmp = tmp->next;
 	}
 	(*list)->tail = NULL;
 	(*list)->head = NULL;
