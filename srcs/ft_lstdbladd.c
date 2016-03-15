@@ -12,7 +12,7 @@
 
 #include "../includes/libft.h"
 
-void	ft_lstdbladd(t_dbllist *list, void *content, size_t cont_size)
+void	ft_lstdbladd_head(t_dbllist *list, void *content, size_t cont_size)
 {
 	t_elem		*new_elem;
 
@@ -37,5 +37,37 @@ void	ft_lstdbladd(t_dbllist *list, void *content, size_t cont_size)
 		new_elem->prev = list->tail;
 	}
 	list->tail = new_elem;
+	list->length++;
+}
+
+void	ft_lstdbladd_tail(t_dbllist *list, void *content, size_t cont_size)
+{
+	t_elem		*new_elem;
+
+	new_elem = (t_elem *)malloc(sizeof(t_elem));
+	if (new_elem == NULL)
+		return ;
+	ft_bzero(new_elem, sizeof(t_elem));
+	new_elem->content = (void *)malloc(cont_size);
+	if (new_elem->content == NULL)
+	{
+		free(new_elem);
+		return ;
+	}
+	ft_memcpy(new_elem->content, content, cont_size);
+	new_elem->next = NULL;
+	new_elem->prev = NULL;
+	if (list->tail == NULL)
+	{
+		new_elem->next = NULL;
+		list->head = new_elem;
+		list->tail = new_elem;
+	}
+	else
+	{
+		list->head->prev = new_elem;
+		new_elem->next = list->head;
+		list->head = new_elem;
+	}
 	list->length++;
 }
