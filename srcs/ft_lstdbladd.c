@@ -40,25 +40,12 @@ void			ft_lstdbladd(t_dbllist *list, void *content, size_t cont_size)
 	list->length++;
 }
 
-static	void	addhead_tailnull(t_dbllist *list, t_elem *new_elem)
-{
-	new_elem->next = NULL;
-	list->tail = new_elem;
-}
-
-static	void	addtail_tailnull(t_dbllist *list, t_elem *new_elem)
-{
-	new_elem->prev = NULL;
-	list->head = new_elem;
-}
-
 void			ft_lstdbladd_head(t_dbllist *list, void *content,
 				size_t cont_size)
 {
 	t_elem		*new_elem;
 
-	new_elem = (t_elem *)malloc(sizeof(t_elem));
-	if (new_elem == NULL)
+	if ((new_elem = (t_elem *)malloc(sizeof(t_elem))) == NULL)
 		return ;
 	ft_bzero(new_elem, sizeof(t_elem));
 	new_elem->content = (void *)malloc(cont_size);
@@ -68,16 +55,17 @@ void			ft_lstdbladd_head(t_dbllist *list, void *content,
 		return ;
 	}
 	ft_memcpy(new_elem->content, content, cont_size);
-	new_elem->next = NULL;
-	new_elem->prev = NULL;
-	if (list->tail == NULL)
-		addhead_tailnull(list, new_elem);
+	if (list->tail == NULL && list->head == NULL)
+	{
+		list->tail = new_elem;
+		list->head = new_elem;
+	}
 	else
 	{
 		list->head->prev = new_elem;
 		new_elem->next = list->head;
+		list->head = new_elem;
 	}
-	list->head = new_elem;
 	list->length++;
 }
 
@@ -97,10 +85,11 @@ void			ft_lstdbladd_tail(t_dbllist *list, void *content,
 		return ;
 	}
 	ft_memcpy(new_elem->content, content, cont_size);
-	new_elem->next = NULL;
-	new_elem->prev = NULL;
 	if (list->tail == NULL)
-		addtail_tailnull(list, new_elem);
+	{
+		new_elem->prev = NULL;
+		list->head = new_elem;
+	}
 	else
 	{
 		list->tail->next = new_elem;
